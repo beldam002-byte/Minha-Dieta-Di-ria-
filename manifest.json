@@ -1,7 +1,7 @@
 {
   "name": "Minha Dieta Diária",
-  "short_name": "Dieta",
-  "start_url": "/",
+  "short_name": "Minha Dieta",
+  "start_url": "./",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#6366F1",
