@@ -223,6 +223,11 @@ body.dark  #plan-summary{background:#1E1B4B}
 .empty{color:var(--muted);text-align:center;padding:24px;font-size:14px}
 .section-title{font-size:17px;font-weight:700;margin-bottom:16px}
 .section-title-sm{font-size:17px;font-weight:700;margin-bottom:12px}
+
+/* ══ DESAFIO DE 22 DIAS ══ */
+.challenge-hero{background:linear-gradient(135deg,#EEF2FF,#F5F3FF);border-radius:20px;padding:18px;margin-bottom:16px}
+body.dark .challenge-hero{background:linear-gradient(135deg,#1E1B4B,#312E81)}
+.challenge-kicker{font-size:11px;font-weight:800;letter-spacing:.8px;color:#6366F1;text-transform:uppercase}.challenge-title{font-size:24px;font-weight:800;margin:4px 0 6px}.challenge-sub{font-size:13px;color:var(--muted);line-height:1.45}.challenge-progress-row{display:flex;justify-content:space-between;align-items:center;margin-top:16px;font-size:12px;font-weight:700}.challenge-progress-track{height:10px;background:var(--week-empty);border-radius:99px;overflow:hidden;margin-top:7px}.challenge-progress-fill{height:100%;background:#6366F1;border-radius:99px;transition:width .3s ease}.challenge-card{background:var(--card);border:var(--border);border-radius:16px;padding:14px;margin-bottom:12px}.challenge-card h3{font-size:14px;margin-bottom:10px}.challenge-note{font-size:11px;color:var(--muted);line-height:1.45}.challenge-meal{border-top:var(--border);padding:12px 0 0;margin-top:12px}.challenge-meal:first-child{border-top:none;padding-top:0;margin-top:0}.challenge-meal-head{display:flex;align-items:center;gap:8px;margin-bottom:8px}.challenge-meal-head strong{font-size:13px}.challenge-options{display:flex;flex-direction:column;gap:6px}.challenge-option{display:flex;align-items:flex-start;gap:8px;border:1px solid var(--border-clr);border-radius:10px;padding:9px;cursor:pointer}.challenge-option.checked{border-color:#6366F1;background:#6366F108}.challenge-option input{accent-color:#6366F1;margin-top:2px}.challenge-option span{font-size:12px;line-height:1.4}.challenge-day-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}.challenge-day{border:1px solid var(--border-clr);background:var(--card);color:inherit;border-radius:10px;padding:8px 4px;cursor:pointer;font-size:11px;font-weight:700}.challenge-day.selected{border-color:#6366F1;background:#EEF2FF;color:#4338CA}body.dark .challenge-day.selected{background:#312E81;color:#E0E7FF}.challenge-day.done{box-shadow:inset 0 -3px #10B981}.challenge-day small{display:block;color:var(--muted);font-weight:400;margin-top:3px}.challenge-fields{display:grid;grid-template-columns:1fr 1fr;gap:8px}.challenge-field label{display:block;font-size:11px;color:var(--muted);margin-bottom:4px}.challenge-field input,.challenge-field textarea{width:100%;border:var(--border);background:var(--input-bg);color:inherit;border-radius:9px;padding:8px;font:inherit;font-size:12px}.challenge-field textarea{min-height:62px;resize:vertical}.challenge-checks{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}.challenge-check{display:flex;align-items:center;gap:6px;font-size:12px}.challenge-check input{accent-color:#6366F1}.challenge-save{width:100%;background:#6366F1;color:#fff;border:0;border-radius:10px;padding:10px;font-weight:700;cursor:pointer}.challenge-free{display:flex;flex-direction:column;gap:8px;margin-top:10px}@media(max-width:360px){.challenge-day-grid{grid-template-columns:repeat(3,1fr)}}
 </style>
 </head>
 <body class="light">
@@ -248,6 +253,7 @@ body.dark  #plan-summary{background:#1E1B4B}
   <button class="tab-btn" data-tab="plano">🥗 Plano Alimentar</button>
   <button class="tab-btn" data-tab="historico">📊 Histórico</button>
   <button class="tab-btn" data-tab="alimentos">🍎 Alimentos</button>
+  <button class="tab-btn" data-tab="desafio">🎯 Desafio de 22 dias</button>
 </div>
 
 <!-- CONTENT -->
@@ -391,6 +397,22 @@ body.dark  #plan-summary{background:#1E1B4B}
     </div>
     <input type="text" id="search-foods" class="search-input" placeholder="🔍 Buscar..."/>
     <div id="food-bank-list"></div>
+  </div>
+
+  <!-- ══ DESAFIO DE 22 DIAS ══ -->
+  <div class="tab-panel" id="panel-desafio">
+    <div class="challenge-hero">
+      <p class="challenge-kicker">Acompanhamento independente</p>
+      <h2 class="challenge-title">Desafio de 22 dias</h2>
+      <p class="challenge-sub">Uma rotina flexível de aproximadamente 1.600 kcal, com foco em proteína, redução de gordura e preservação de massa muscular.</p>
+      <div class="challenge-progress-row"><span id="challenge-progress-label">0 de 22 dias concluídos</span><span id="challenge-progress-pct">0%</span></div>
+      <div class="challenge-progress-track"><div class="challenge-progress-fill" id="challenge-progress-fill" style="width:0%"></div></div>
+    </div>
+    <div class="challenge-card"><h3>Escolha o dia para registrar</h3><div class="challenge-day-grid" id="challenge-days"></div></div>
+    <div class="challenge-card"><h3 id="challenge-selected-title">Refeições do Dia 1</h3><p class="challenge-note">Selecione uma opção por refeição. As opções são substituições — o mingau substitui o iogurte e a batata do jantar é opcional.</p><div id="challenge-meals"></div></div>
+    <div class="challenge-card"><h3>Treino e cardio</h3><div class="challenge-checks"><label class="challenge-check"><input type="checkbox" id="challenge-weight"> Musculação realizada</label><label class="challenge-check"><input type="checkbox" id="challenge-cardio"> Cardio realizado</label></div><div class="challenge-fields"><div class="challenge-field"><label for="challenge-minutes">Duração do cardio (min)</label><input id="challenge-minutes" type="number" min="0" placeholder="Meta mínima: 40"></div><div class="challenge-field"><label for="challenge-weight-value">Peso (opcional)</label><input id="challenge-weight-value" type="number" min="0" step="0.1" placeholder="kg"></div></div><p class="challenge-note" style="margin-top:8px">Meta mínima de cardio: 40 minutos. Chegar a 60 minutos é opcional, conforme sua disposição — não é uma obrigação diária.</p></div>
+    <div class="challenge-card"><h3>Observações e flexibilidade</h3><div class="challenge-fields"><div class="challenge-field"><label for="challenge-notes">Observações do dia</label><textarea id="challenge-notes" placeholder="Como foi seu dia?"></textarea></div><div class="challenge-field"><label>Fim de semana</label><div class="challenge-free"><label class="challenge-check"><input type="checkbox" id="challenge-sunday-free"> Refeição livre no domingo</label><label class="challenge-check"><input type="checkbox" id="challenge-saturday-free"> Refeição mais livre no sábado</label></div></div></div><button class="challenge-save" id="challenge-save">Salvar check-in do dia</button></div>
+    <div class="challenge-card"><h3>Regras do desafio</h3><p class="challenge-note">Sem óleo ou azeite no preparo. Priorize proteína adequada, legumes e salada. Não é necessário atingir exatamente 1.600 kcal todos os dias. Não há ceia, culpa, punição ou compensação: ajuste as escolhas à sua rotina real.</p></div>
   </div>
 
 </div><!-- /content -->
@@ -618,6 +640,7 @@ let STATE = {
   searchHoje: '',
   searchFoods: '',
   editingFood: null,
+  challenge: ls('diet2_challenge22', {selectedDay:1, days:{}}),
 };
 
 function save(){
@@ -625,6 +648,7 @@ function save(){
   ss('diet2_foods', STATE.foods);
   ss('diet2_log', STATE.dayLog);
   ss('diet2_plan', STATE.planSelections);
+  ss('diet2_challenge22', STATE.challenge);
 }
 
 function todayEntries(){return STATE.dayLog[todayKey()]||[];}
@@ -666,6 +690,7 @@ function switchTab(tab){
   if(tab==='plano') renderPlano();
   if(tab==='historico') renderHistorico();
   if(tab==='alimentos') renderAlimentos();
+  if(tab==='desafio') renderDesafio();
 }
 
 // ══════════════════════════════════════════════
@@ -1240,6 +1265,27 @@ function saveFood(){
 }
 
 // ══════════════════════════════════════════════
+// TAB: DESAFIO DE 22 DIAS
+// ══════════════════════════════════════════════
+const CHALLENGE_MEALS=[
+ {name:'Café da manhã',icon:'☀️',options:['Opção 1 — Pão 50 g, 1 ovo, muçarela 20 g, requeijão light 15 g e 1 fruta','Opção 2 — Rabanana: pão, ovo, banana, canela e requeijão opcional','Opção 3 — Pão 50 g, 2 ovos e requeijão light 10–15 g','Opção 4 — Pão 50 g, muçarela 30 g, requeijão light 15 g e 1 fruta']},
+ {name:'Lanche da manhã',icon:'🍎',options:['Opção 1 — Iogurte caseiro desnatado 170–200 g + chia 10–15 g + 1 fruta','Opção 2 — Iogurte caseiro 170–200 g + chia 10 g + Magic Toast 20–25 g','Opção 3 — Mingau ocasional: aveia 20–25 g, leite em pó 15 g, água, canela e ½–1 banana','Opção 4 — Pão 40–50 g + 1 ovo + requeijão light 10 g']},
+ {name:'Almoço',icon:'🍽️',options:['Opção 1 — Carne 100 g + batata 150–180 g + legumes e salada à vontade','Opção 2 — Carne 100 g + arroz cozido 80 g + feijão 60–80 g + legumes e salada','Opção 3 — Fígado bovino 100 g + batata 150–180 g + legumes e salada','Opção 4 — Frango 100–120 g + batata 100–150 g + legumes e salada'],note:'Preparo sem óleo e sem azeite.'},
+ {name:'Lanche da tarde',icon:'🌇',options:['Opção 1 — Pipoca: milho 40–50 g, preparada sem óleo','Opção 2 — Crepioca: 1 ovo, tapioca 25–30 g, muçarela 10 g e requeijão 5–10 g','Opção 3 — Pão 50 g + 1 ovo + requeijão light 10–15 g','Opção 4 — Iogurte caseiro 170–200 g + chia 10–15 g + 1 fruta','Opção 5 — Rabanana: pão, ovo, banana e canela']},
+ {name:'Jantar',icon:'🌙',options:['Opção 1 — Alcatra 80–100 g + legumes e salada à vontade, sem óleo','Opção 2 — Alcatra 80–100 g + batata 150–180 g + legumes e salada','Opção 3 — Sanduíche: alcatra 80–100 g, pão 50 g, muçarela 10–20 g, requeijão 10 g e salada','Opção 4 — Frango 100–120 g + legumes e salada','Opção 5 — Fígado bovino 100 g + legumes e salada; batata opcional 150 g'],note:'Batata é opcional. Se não quiser carboidrato, consuma mais legumes e salada sem precisar substituir.'}
+];
+function challengeDay(){return STATE.challenge.days[String(STATE.challenge.selectedDay)]||(STATE.challenge.days[String(STATE.challenge.selectedDay)]={});}
+function renderDesafio(){
+ const day=challengeDay(), selected=STATE.challenge.selectedDay, completed=Object.values(STATE.challenge.days).filter(d=>d.completed).length;
+ document.getElementById('challenge-progress-label').textContent=`${completed} de 22 dias concluídos`;document.getElementById('challenge-progress-pct').textContent=Math.round(completed/22*100)+'%';document.getElementById('challenge-progress-fill').style.width=(completed/22*100)+'%';
+ document.getElementById('challenge-selected-title').textContent=`Refeições do Dia ${selected}`;
+ const days=document.getElementById('challenge-days');days.innerHTML='';for(let i=1;i<=22;i++){const b=document.createElement('button');b.className='challenge-day'+(i===selected?' selected':'')+(STATE.challenge.days[String(i)]?.completed?' done':'');b.innerHTML=`Dia ${i}<small>${STATE.challenge.days[String(i)]?.completed?'Concluído':'Registrar'}</small>`;b.onclick=()=>{STATE.challenge.selectedDay=i;save();renderDesafio()};days.appendChild(b)}
+ const meals=document.getElementById('challenge-meals');meals.innerHTML='';CHALLENGE_MEALS.forEach((meal,mi)=>{const wrap=document.createElement('div');wrap.className='challenge-meal';wrap.innerHTML=`<div class="challenge-meal-head"><span>${meal.icon}</span><strong>${meal.name}</strong></div><div class="challenge-options"></div>${meal.note?`<p class="challenge-note" style="margin-top:6px">${meal.note}</p>`:''}`;const options=wrap.querySelector('.challenge-options');meal.options.forEach((label,oi)=>{const l=document.createElement('label');l.className='challenge-option'+(day.meals?.[mi]===oi?' checked':'');l.innerHTML=`<input type="radio" name="challenge-meal-${mi}" ${day.meals?.[mi]===oi?'checked':''}><span>${label}</span>`;l.querySelector('input').onchange=()=>{day.meals={...(day.meals||{}),[mi]:oi};save();renderDesafio()};options.appendChild(l)});meals.appendChild(wrap)});
+ document.getElementById('challenge-weight').checked=!!day.weight;document.getElementById('challenge-cardio').checked=!!day.cardio;document.getElementById('challenge-minutes').value=day.minutes||'';document.getElementById('challenge-weight-value').value=day.bodyWeight||'';document.getElementById('challenge-notes').value=day.notes||'';document.getElementById('challenge-sunday-free').checked=!!day.sundayFree;document.getElementById('challenge-saturday-free').checked=!!day.saturdayFree;
+}
+function saveChallengeCheckin(){const d=challengeDay();d.weight=document.getElementById('challenge-weight').checked;d.cardio=document.getElementById('challenge-cardio').checked;d.minutes=Number(document.getElementById('challenge-minutes').value)||0;d.bodyWeight=document.getElementById('challenge-weight-value').value;d.notes=document.getElementById('challenge-notes').value.trim();d.sundayFree=document.getElementById('challenge-sunday-free').checked;d.saturdayFree=document.getElementById('challenge-saturday-free').checked;d.completed=Object.keys(d.meals||{}).length===5||d.weight||d.cardio||d.minutes>0||d.notes||d.bodyWeight||d.sundayFree||d.saturdayFree;save();renderDesafio()}
+
+// ══════════════════════════════════════════════
 // EXPORT
 // ══════════════════════════════════════════════
 function exportJSON(){
@@ -1278,6 +1324,7 @@ document.getElementById('btn-cancel-food').onclick=clearForm;
 document.getElementById('plan-clear-btn').onclick=()=>{
   if(confirm('Remover do diário todos os itens adicionados pelo Plano Alimentar?')) clearPlanForToday();
 };
+document.getElementById('challenge-save').onclick=saveChallengeCheckin;
 
 // ══════════════════════════════════════════════
 // INIT
